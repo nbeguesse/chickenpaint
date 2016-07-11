@@ -660,6 +660,7 @@ export default function CPCanvas(controller) {
 
                 dragBezierMode = 0;
                 dragBezierP0 = dragBezierP1 = dragBezierP2 = dragBezierP3 = p;
+                this.capture = true;
 
                 this.eraseBrushPreview();
 
@@ -1026,7 +1027,7 @@ export default function CPCanvas(controller) {
                 plotSelectionRect(canvasContext, curRect);
             }
         };
-    };
+    }
 
     CPRectSelectionMode.prototype = Object.create(CPMode.prototype);
     CPRectSelectionMode.prototype.constructor = CPRectSelectionMode;
@@ -1038,7 +1039,7 @@ export default function CPCanvas(controller) {
             firstMove = false;
 
         this.mouseDown = function(e, button, pressure) {
-            if (!this.capture && button == BUTTON_PRIMARY && !e.altKey && !key.isPressed("space")) {
+            if (!this.capture && button == BUTTON_PRIMARY && !key.isPressed("space") && shouldDrawToThisLayer()) {
                 lastPoint = coordToDocument({x: mouseX, y: mouseY});
 
                 copyMode = e.altKey;
@@ -1949,7 +1950,7 @@ export default function CPCanvas(controller) {
     /**
      * Get canvas rotation in radians.
      * 
-     * @return float
+     * @return {number}
      */
     this.getRotation = function() {
         return canvasRotation;
